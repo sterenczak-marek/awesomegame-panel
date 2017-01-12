@@ -1,0 +1,24 @@
+<!-- sidebar menu -->
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+        <h3>General</h3>
+        <ul class="nav side-menu">
+            <li><a href="{% url 'home' %}"><i class="fa fa-home"></i>Strona główna</a></li>
+
+            {% if request.user.is_authenticated %}
+                <li><a href="{% url 'room:list' %}"><i class="fa fa-edit"></i>Pokoje</a></li>
+
+
+                {% if request.user.is_superuser %}
+
+                    <li><a href="{% url 'server:list' %}"><i class="fa fa-desktop"></i> Serwery gry</a></li>
+                {% endif %}
+
+            {% else %}
+                <li><a href="{% url 'account_login' %}">Zaloguj</a></li>
+
+            {% endif %}
+
+        </ul>
+    </div>
+</div>

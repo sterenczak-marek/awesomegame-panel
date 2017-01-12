@@ -1,0 +1,57 @@
+wheel==0.29.0
+six==1.10.0
+
+Django==1.10.5
+
+# Configuration
+dj-database-url==0.4.2
+django-environ==0.4.1
+django-secure==1.0.1
+
+django-braces==1.8.1
+django-crispy-forms==1.6.0
+django-floppyforms==1.6.1
+
+# Models
+django-model-utils==2.4
+
+# Images
+# niepotrzebne na razie
+# Pillow==3.1.1
+
+# For user registration, either via email or social
+# Well-built with regular release cycles!
+django-allauth==0.24.1
+
+
+# Python-PostgreSQL Database Adapter
+psycopg2==2.6.1
+
+# Unicode slugification
+unicode-slugify==0.1.3
+django-autoslug==1.9.3
+
+# Time zones support
+pytz==2015.7
+
+# Redis support
+django-redis==4.3.0
+redis>=2.10.0
+
+
+celery==3.1.21
+django-celery==3.1.17
+
+# Django Websockets
+
+django-websocket-redis==0.4.6
+
+
+# Your custom requirements go here
+
+djangorestframework
+drf-extensions
+
+pyyaml
+
+datadog

@@ -1,0 +1,72 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+{% load socialaccount %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+
+
+{% block account_body %}
+    <body class="login">
+    <div>
+        <a class="hiddenanchor" id="signup"></a>
+        <a class="hiddenanchor" id="signin"></a>
+
+        <div class="login_wrapper">
+            <div class="animate form login_form">
+                <section class="login_content">
+
+                    <form class="login" method="POST" action="{% url 'account_login' %}">
+                        <h1>Logowanie</h1>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                        {% endif %}
+                        <button id="sign-in-button" class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+                        <a class="button secondaryAction"
+                           href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                    </form>
+                    {% get_providers as socialaccount_providers %}
+                    {% if socialaccount_providers %}
+                        <p>{% blocktrans with site.name as site_name %}Please sign in with one
+                            of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+                            for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+                        <div class="socialaccount_ballot">
+
+                            <ul class="socialaccount_providers">
+                                {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                            </ul>
+
+                            <div class="login-or">{% trans 'or' %}</div>
+
+                        </div>
+
+                        {% include "socialaccount/snippets/login_extra.html" %}
+
+                    {% endif %}
+                </section>
+            </div>
+
+        </div>
+    </div>
+    </body>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

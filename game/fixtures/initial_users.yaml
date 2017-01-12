@@ -1,0 +1,8 @@
+- model: awesome_users.gameuser
+  pk: 1
+  fields:
+    password: pbkdf2_sha256$24000$l1FlTTvhtxpF$Up50AxIWUs/YSxFCZW7h7mg1DXt+uKiXfGspZy/UbE4=
+    username: admin
+    email: admin@webomm.pl
+    is_superuser: True
+    is_staff: True

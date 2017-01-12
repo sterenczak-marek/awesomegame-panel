@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile">
+            <div class="x_title">
+                <h2>Dane podstawowe</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <dl class="dl-horizontal">
+                    <dt>Nazwa:</dt>
+                    <dd>{{ object.name }}</dd>
+
+                    <dt>Url:</dt>
+                    <dd><a href="{{ object.url }}">{{ object.url }}</a></dd>
+                </dl>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile">
+            <div class="x_title">
+                <h2>Dane serwera</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <dl class="dl-horizontal">
+                    <dt>Status:</dt>
+                    <dd>{{ object.status }}</dd>
+                </dl>
+
+                <div class="form-group">
+                    {% if object.status_id == 10 or object.status_id == 9 %}
+                        <button id="run-btn" class="btn btn-success ajax-action" data-url="{% url 'api:gameserver-run' object.pk %}">
+                            Uruchom serwer
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile">
+            <div class="x_title">
+                <h2>Pomoc</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                {% if object.status_id == 10 or object.status_id == 9 %}
+
+                    <div class="alert alert-warning">Przed uruchomieniem pamiętaj dodać klucz publiczny aplikacji do pliku /root/.ssh/authorized_keys</div>
+                    <pre><code>
+                            {{ public_ssh_key }}
+                        </code></pre>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('.ajax-action').click(function (e) {
+                e.preventDefault();
+
+                sendAjax({
+                    url: $(this).data('url'),
+                    method: "POST",
+                    complete: function () {
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+
+    </script>
+{% endblock %}

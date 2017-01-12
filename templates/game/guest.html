@@ -1,0 +1,16 @@
+<div id="login_view">
+    <div ng-if="complete == false">
+        <form role="form" ng-if="authenticated != true" name="loginForm" ng-submit="login(loginForm)" novalidate>
+
+            <div vc-recaptcha ng-model="model.recaptcha"></div>
+
+            <button ng-hide="authenticated" type="submit" class="btn btn-primary">Zaloguj</button>
+        </form>
+        <p ng-if="authenticated">You are already logged in!  You don't need to register.</p>
+    </div>
+    <div ng-if="complete == true">
+        <div class="alert alert-success">Udało Ci się zalogować!</div>
+    </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>

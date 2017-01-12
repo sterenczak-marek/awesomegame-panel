@@ -1,0 +1,3 @@
+[submodule "awesomegame-common-apps"]
+	path = awesomegame-common-apps
+	url = ../awesomegame-common-apps

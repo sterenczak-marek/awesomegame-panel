@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+    <h4>Witam w pokoju {{ room.name }} </h4>
+
+    <ul id="game-users-list">
+        <h5>Gracze w pokoju</h5>
+    </ul>
+
+    <button id="join-btn" class="btn btn-success ajax-action" data-url="{% url 'api:room-join' room.slug %}">
+        Dołącz
+    </button>
+    <button id="leave-btn" class="btn btn-danger ajax-action" data-url="{% url 'api:room-leave' room.slug %}">
+        Opuść
+    </button>
+    <button id="ready-btn" class="btn btn-primary ajax-action" data-url="{% url 'api:room-ready' room.slug %}">
+        Jestem gotowy
+    </button>
+    <button id="unready-btn" class="btn btn-warning ajax-action" data-url="{% url 'api:room-unready' room.slug %}">
+        Jestem niegotowy
+    </button>
+
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            function get_user_rows() {
+                sendAjax({
+                    url: "{% url 'api:room-users' room.slug %}",
+                    method: "GET",
+                    success: function (data) {
+                        refresh_user_list(data);
+                    }
+                })
+            }
+
+            function refresh_user_list(users) {
+                $('ul#game-users-list').find('li').remove();
+
+                $.each(users, function (index, user) {
+                    var dom_el = $('ul#game-users-list');
+
+                    var admin_span = user.is_admin ? " <span class='label label-danger'>Admin</span> " : "";
+                    var ready_span = user.ready_to_play ? " <span class='label label-success'>Gotowy</span> " : "";
+
+                    dom_el.append(
+                            "<li id='" + user.username + "'>" + user.username + admin_span + ready_span + "</li>");
+                });
+            }
+
+            function checkButtonsVisibility() {
+                $('.ajax-action').hide();
+                sendAjax({
+                    url: "{% url 'api:room-allowed-actions' room.slug %}",
+                    method: "GET",
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.join) {
+                            $('#join-btn').show();
+                        }
+                        if (data.leave) {
+                            $('#leave-btn').show();
+                        }
+                        if (data.ready) {
+                            $('#ready-btn').show();
+                        }
+                        if (data.unready) {
+                            $('#unready-btn').show();
+                        }
+                    }
+                })
+            }
+
+            function receiveMessage(msg) {
+                var data = JSON.parse(msg);
+
+                if (data instanceof Array) {
+                    refresh_user_list(data);
+                } else {
+                    window.location = data.url
+                }
+            }
+
+            $('.ajax-action').click(function (e) {
+                e.preventDefault();
+
+                sendAjax({
+                    url: $(this).data('url'),
+                    method: "POST",
+                    complete: checkButtonsVisibility
+                });
+            });
+
+            var ws4redis = WS4Redis({
+                uri: '{{ WEBSOCKET_URI }}room_detail?subscribe-group&subscribe-user',
+                receive_message: receiveMessage,
+                heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+            });
+
+            get_user_rows();
+            checkButtonsVisibility();
+        });
+
+    </script>
+{% endblock %}

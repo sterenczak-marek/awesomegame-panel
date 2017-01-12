@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12" ui-view>
+            {% block main_content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+    {#    <script apps="{{ STATIC_URL }}js/ws4redis.js" type="text/javascript"></script>#}
+    {% block script_panel %}{% endblock %}
+
+{% endblock %}
