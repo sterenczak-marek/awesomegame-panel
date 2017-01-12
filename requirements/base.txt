@@ -55,3 +55,5 @@ drf-extensions
 pyyaml
 
 datadog
+
+git+https://github.com/sterenczak-marek/awesomegame-common.git

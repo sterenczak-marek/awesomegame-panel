@@ -14,10 +14,7 @@ framework.
 
 """
 import os
-import sys
 from django.core.wsgi import get_wsgi_application
-
-sys.path.append('./awesomegame-common/')
 
 if os.environ.get("DJANGO_SETTINGS_MODULE") == "config.settings.production":
     import newrelic.agent
