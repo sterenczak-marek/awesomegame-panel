@@ -1,3 +1,3 @@
-[submodule "awesomegame-common-apps"]
-	path = awesomegame-common-apps
-	url = ../awesomegame-common-apps
+[submodule "awesomegame-common"]
+	path = awesomegame-common
+	url = https://sterenczak-marek:marek017@github.com/sterenczak-marek/awesomegame-common.git
