@@ -14,8 +14,6 @@ from .common import *  # noqa
 
 # TODO: nadpisanie zbedne
 
-STATIC_ROOT = project_root('staticfiles')
-
 # DEBUG
 # ------------------------------------------------------------------------------
 DEBUG = env.bool('DJANGO_DEBUG', default=True)

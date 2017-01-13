@@ -2,7 +2,6 @@ from .common import *  # noqa
 
 DEBUG = True
 
-STATIC_ROOT = project_root('staticfiles')
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 DATABASES = {

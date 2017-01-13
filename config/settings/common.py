@@ -49,7 +49,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
 
-    'djcelery',
+    'djangobower',
 )
 
 # Apps specific for this project go here.
@@ -180,7 +180,27 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+
+    'djangobower.finders.BowerFinder',
 )
+
+
+STATIC_ROOT = project_root('staticfiles')
+BOWER_COMPONENTS_ROOT = project_root('vendor')
+
+
+BOWER_INSTALLED_APPS = (
+    "bootstrap#3.3.1",
+    "font-awesome#4.2.0",
+    "datatables-plugins#1.0.1",
+    "datatables-responsive#1.0.3",
+    "reset-css",
+    "jquery#2.1.3",
+    "lodash#3.7.0",
+    "gentelella#1.3.0",
+    "datatables.net#1.10.11",
+)
+
 
 # MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -223,16 +243,12 @@ AUTH_USER_MODEL = 'awesome_users.GameUser'
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
-########## CELERY
-# INSTALLED_APPS += ('taskapp.celery.CeleryConfig',)
-# # if you are not using the django database broker (e.g. rabbitmq, redis, memcached), you can remove the next line.
-INSTALLED_APPS += ('kombu.transport.django',)
-BROKER_URL = 'django://'
-# CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+# CELERY
+BROKER_POOL_LIMIT = 3
+BROKER_URL = env('CLOUDAMQP_URL')
+CELERY_RESULT_BACKEND = env('CLOUDAMQP_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-########## END CELERY
-
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = r'^admin/'
