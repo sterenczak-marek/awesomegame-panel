@@ -262,8 +262,10 @@ WS4REDIS_HEARTBEAT = '--heartbeat--'
 WS4REDIS_ALLOWED_CHANNELS = 'common.redis'
 
 WS4REDIS_CONNECTION = {
-    'host': '127.0.0.1',
-    'port': 6379
+    'host': 'ec2-107-21-109-207.compute-1.amazonaws.com',
+    'port': 18779,
+    'db': 'h',
+    'password': 'pbd2a22e47a640c9e146a68e1cdbe68140a47c4bf82f636af7864b8e4b2b6dc48'
 }
 
 REST_FRAMEWORK = {
