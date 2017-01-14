@@ -13,8 +13,9 @@ ALLOWED_HOSTS = [
     'awesomegame-panel.herokuapp.com',
 ]
 
-# Mail settings - TODO: mailgun
+# Mail settings
 # ------------------------------------------------------------------------------
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = project_root('poczta')
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 
+MAILGUN_ACCESS_KEY = env('MAILGUN_ACCESS_KEY')
+MAILGUN_SERVER_NAME = env('MAILGUN_SERVER_NAME')
