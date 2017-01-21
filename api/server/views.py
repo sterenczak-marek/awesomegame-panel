@@ -11,7 +11,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
 
 from server.models import GameServer
-from common.celery import app as celery_app
+from common.app import app as celery_app
 
 from .serializers import GameServerSerializer
 

@@ -19,6 +19,7 @@ environ.Env.read_env(project_root('.env'))
 
 
 SITE_ROOT = project_root()
+SALT_PATH = project_root('salt')
 
 SECRET_KEY = 'dupa'
 

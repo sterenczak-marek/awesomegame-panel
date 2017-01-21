@@ -1,5 +1,4 @@
-import os
-
+import environ
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
@@ -34,7 +33,8 @@ class ServerDetailView(AdminMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ServerDetailView, self).get_context_data(**kwargs)
 
-        public_key_path = os.path.normpath(os.path.join(settings.SALT_PATH, 'salt-ssh.rsa.pub'))
+        salt_root = environ.Path(settings.SALT_PATH)
+        public_key_path = salt_root('_pki/ssh/salt-ssh.rsa.pub')
 
         with open(public_key_path) as public_key_file:
             ssh_key = public_key_file.read()

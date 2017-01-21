@@ -38,11 +38,9 @@
                 </dl>
 
                 <div class="form-group">
-                    {% if object.status_id == 10 or object.status_id == 9 %}
                         <button id="run-btn" class="btn btn-success ajax-action" data-url="{% url 'api:gameserver-run' object.pk %}">
                             Uruchom serwer
                         </button>
-                    {% endif %}
                 </div>
             </div>
         </div>

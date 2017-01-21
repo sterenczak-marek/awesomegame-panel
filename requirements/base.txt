@@ -35,7 +35,7 @@ django-autoslug==1.9.3
 pytz==2015.7
 
 # Redis support
-django-redis==4.3.0
+django-redis==4.7.0
 redis>=2.10.0
 
 celery==4.0.2
@@ -43,7 +43,7 @@ django-bower==5.2.0
 
 # Django Websockets
 
-django-websocket-redis==0.4.6
+django-websocket-redis==0.4.7
 
 
 # Your custom requirements go here
@@ -56,3 +56,6 @@ pyyaml
 datadog
 
 git+https://github.com/sterenczak-marek/awesomegame-common.git
+
+salt-ssh==2016.11.1
+gitpython
