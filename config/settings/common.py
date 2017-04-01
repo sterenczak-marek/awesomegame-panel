@@ -200,6 +200,22 @@ BOWER_INSTALLED_APPS = (
     "lodash#3.7.0",
     "gentelella#1.3.0",
     "datatables.net#1.10.11",
+    "datatables.net#^1.10.11",
+    "datatables.net-bs#^1.10.11",
+    "datatables.net-buttons#^1.1.2",
+    "datatables.net-buttons-bs#^1.1.2",
+    "datatables.net-fixedheader#^3.1.1",
+    "datatables.net-fixedheader-bs#^3.1.1",
+    "datatables.net-keytable#^2.1.1",
+    "datatables.net-responsive#^2.0.2",
+    "datatables.net-responsive-bs#^2.0.2",
+    "datatables.net-scroller#^1.4.1",
+    "datatables.net-scroller-bs#^1.4.1",
+    "icheck#^1.0.2"   ,
+    "bootstrap-progressbar#^0.9.0",
+    "nprogress#^0.2.0",
+    "fastclick#^1.0.6",
+    "animate.css#3.5.2"
 )
 
 
