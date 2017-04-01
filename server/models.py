@@ -41,20 +41,6 @@ class GameServer(models.Model):
         if not self.pk:
             self.slug = slugify(self.name)
 
-            name = 'game-server-%s' % self.slug
-
-            roster_config = {
-                name: {
-                    'user': 'ubuntu',
-                    'host': self.url.split('//')[1],
-                    'sudo': True
-                }
-            }
-            salt_roster_path = environ.Path(settings.SALT_PATH)('config/roster')
-            with open(salt_roster_path, 'w+') as salt_roster_file:
-                yaml.safe_dump(roster_config, salt_roster_file, indent=4, default_flow_style=False)
-
-
         return super(GameServer, self).save(*args, **kwargs)
 
 

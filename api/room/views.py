@@ -57,7 +57,14 @@ def _get_available_server():
 
     data = api.Metric.query(start=now - 60, end=now, query=query)
 
-    return GameServer.objects.filter(status_id=1).first()
+    # TODO: dorobić analize i wybor serwera
+
+    server = GameServer.objects.filter(status_id=1).first()
+
+    if server.auth_token is None:
+        return None
+
+    return server
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -168,6 +175,9 @@ class RoomViewSet(viewsets.ModelViewSet):
     def _start_game(self, room):
 
         server = _get_available_server()
+
+        if server is None:
+            return Response(status=400, data="{'error': 'Brak dostępnego serwera!'}")
 
         serialized_data = self.get_serializer(instance=room).data
 

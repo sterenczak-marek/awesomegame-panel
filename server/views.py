@@ -23,23 +23,9 @@ class ServerListView(AdminMixin, ListView):
 
 class ServerCreateView(AdminMixin, CreateView):
     model = GameServer
-    fields = ['name', 'url']
+    fields = ['name', 'url', 'auth_token']
     success_url = reverse_lazy('server:list')
 
 
 class ServerDetailView(AdminMixin, DetailView):
     model = GameServer
-
-    def get_context_data(self, **kwargs):
-        context = super(ServerDetailView, self).get_context_data(**kwargs)
-
-        salt_root = environ.Path(settings.SALT_PATH)
-        public_key_path = salt_root('_pki/ssh/salt-ssh.rsa.pub')
-
-        with open(public_key_path) as public_key_file:
-            ssh_key = public_key_file.read()
-
-        context.update({
-            'public_ssh_key': ssh_key
-        })
-        return context
