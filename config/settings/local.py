@@ -11,6 +11,8 @@ import os
 
 from .common import *  # noqa
 
+SECRET_KEY = env('DJANGO_SECRET_KEY', default='cTA6ij=RsO7rE^EWHAaYnVVs~,5Qi1aoQZohm4<U6::C]gI5o.')
+
 
 # TODO: nadpisanie zbedne
 
@@ -45,6 +47,9 @@ CACHES = {
         'LOCATION': ''
     }
 }
+
+BROKER_URL = env('CLOUDAMQP_URL', default='redis://localhost:6379')
+CELERY_RESULT_BACKEND = env('CLOUDAMQP_URL', default='redis://localhost:6379')
 
 # SALT_PATH = os.path.join(BASE_DIR, '..', 'salt')
 

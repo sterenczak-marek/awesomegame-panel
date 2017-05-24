@@ -1,0 +1,12 @@
+{% load account %}
+
+{% user_display user as user_display %}
+
+Witaj w grze AwesomeGame!
+
+Dostajesz tą wiadomość ponieważ użytkownik '{{ user_display }}' podał ten adres dla swojego konta.
+
+W celu potwierdzenia porawności, odwiedź stronę {{ activate_url }}
+
+
+AwesomeGame

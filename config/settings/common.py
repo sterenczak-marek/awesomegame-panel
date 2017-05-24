@@ -21,8 +21,6 @@ environ.Env.read_env(project_root('.env'))
 SITE_ROOT = project_root()
 SALT_PATH = project_root('salt')
 
-SECRET_KEY = env('SECRET_KEY')
-
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
@@ -198,7 +196,7 @@ BOWER_INSTALLED_APPS = (
     "reset-css",
     "jquery#2.1.3",
     "lodash#3.7.0",
-    "gentelella#1.3.0",
+    "gentelella#1.4.0",
     "datatables.net#1.10.11",
     "datatables.net#^1.10.11",
     "datatables.net-bs#^1.10.11",
@@ -260,10 +258,11 @@ AUTH_USER_MODEL = 'awesome_users.GameUser'
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
+EMAIL_SUBJECT_PREFIX = '[AwesomeGame]'
+DEFAULT_FROM_EMAIL = 'no-reply@awesomegame.sterenczak.me'
+
 # CELERY
 BROKER_POOL_LIMIT = 3
-BROKER_URL = env('CLOUDAMQP_URL')
-CELERY_RESULT_BACKEND = env('CLOUDAMQP_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 

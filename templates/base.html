@@ -45,25 +45,10 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-facebook"></i> <span>Awesome Game</span></a>
+                        <a href="/" class="site_title"><span>AwesomeGame</span></a>
                     </div>
 
                     <div class="clearfix"></div>
-
-                    {% if request.user.is_authenticated %}
-                        <div class="profile">
-                            <div class="profile_pic">
-                                <img src="{% static 'gentelella/production/images/img.jpg' %}" alt="..."
-                                     class="img-circle profile_img">
-                            </div>
-                            <div class="profile_info">
-                                <span>Witam,</span>
-                                <h2>{{ request.user }}</h2>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    <br/>
 
                     {% include "sidebar.html" %}
 
@@ -92,8 +77,11 @@
 
         <!-- footer content -->
         <footer>
+            <div class="pull-left">
+                Autor: <a href="mailto:ms42091@st.amu.edu.pl">Marek Stereńczak</a>
+            </div>
             <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                Szablon Gentelella - stworzony przez <a href="https://colorlib.com">Colorlib</a>
             </div>
             <div class="clearfix"></div>
         </footer>

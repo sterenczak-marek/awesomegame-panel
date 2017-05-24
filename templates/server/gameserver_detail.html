@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="col-md-6 col-sm-6 col-xs-12">
         <div class="x_panel tile">
             <div class="x_title">
                 <h2>Dane podstawowe</h2>
@@ -18,23 +18,29 @@
 
                     <dt>Url:</dt>
                     <dd><a href="{{ object.url }}">{{ object.url }}</a></dd>
+
+                    <dt>Status:</dt>
+                    <dd>{{ object.status }}</dd>
                 </dl>
 
             </div>
         </div>
     </div>
 
-    <div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="col-md-6 col-sm-6 col-xs-12">
         <div class="x_panel tile">
             <div class="x_title">
-                <h2>Dane serwera</h2>
+                <h2>Wykorzystanie zasobów</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
 
                 <dl class="dl-horizontal">
-                    <dt>Status:</dt>
-                    <dd>{{ object.status }}</dd>
+                    <dt>Procesor:</dt>
+                    <dd>{{ stats.cpu }} %</dd>
+
+                    <dt>Pamięć RAM:</dt>
+                    <dd>{{ stats.ram | filesizeformat }}</dd>
                 </dl>
             </div>
         </div>

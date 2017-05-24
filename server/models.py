@@ -23,11 +23,11 @@ class GameServerStatus(models.Model):
 
 @python_2_unicode_compatible
 class GameServer(models.Model):
-    name = models.CharField(max_length=256, default='', unique=True)
+    name = models.CharField("Nazwa", max_length=256, default='', unique=True)
     slug = models.SlugField()
 
-    url = models.URLField(unique=True)
-    auth_token = models.CharField(max_length=256, blank=True)
+    url = models.URLField("Adres URL", unique=True)
+    auth_token = models.CharField("Token uwierzytelniający", max_length=256, blank=True)
 
     status = models.ForeignKey(GameServerStatus, default=10)
 
