@@ -1,16 +1,11 @@
-import environ
-
-import numpy
 import time
 
+import numpy
+from datadog import api, initialize
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView
-from django.views.generic import DetailView
-from django.views.generic import ListView
-
-from datadog import initialize, api
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .models import GameServer
 
@@ -29,8 +24,13 @@ class ServerListView(AdminMixin, ListView):
 
 class ServerCreateView(AdminMixin, CreateView):
     model = GameServer
-    fields = ['name', 'url', 'auth_token']
+    fields = ['name', 'url', 'auth_token', 'datadog_hostname']
     success_url = reverse_lazy('server:list')
+
+
+class ServerEditView(AdminMixin, UpdateView):
+    model = GameServer
+    fields = ['url', 'auth_token', 'datadog_hostname', 'status']
 
 
 class ServerDetailView(AdminMixin, DetailView):
@@ -38,7 +38,6 @@ class ServerDetailView(AdminMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ServerDetailView, self).get_context_data(*args, **kwargs)
-
 
         options = {
             'api_key': settings.DD_API_KEY,
@@ -48,22 +47,28 @@ class ServerDetailView(AdminMixin, DetailView):
         initialize(**options)
 
         now = int(time.time())
-        query = 'system.cpu.user{server:game}by{host}'
-        data = api.Metric.query(start=now - 60, end=now, query=query)
+        query = 'system.cpu.user{host:%s}' % self.object.datadog_hostname
+        cpu_data = api.Metric.query(start=now - 3600, end=now, query=query)
 
-        cpu_list = [item[1] for item in data['series'][0]['pointlist']]
-        avg_cpu = numpy.mean(cpu_list)
+        query = 'system.mem.used{host:%s}' % self.object.datadog_hostname
+        mem_data = api.Metric.query(start=now - 3600, end=now, query=query)
 
-        query = 'system.mem.used{server:game}by{host}'
-        data = api.Metric.query(start=now - 60, end=now, query=query)
+        cpu, ram = None, None
 
-        memory_list = [item[1] for item in data['series'][0]['pointlist']]
-        avg_ram = numpy.mean(memory_list)
+        if cpu_data['series']:
+            cpu_list = [item[1] for item in cpu_data['series'][0]['pointlist']]
+            avg_cpu = numpy.mean(cpu_list)
+            cpu = round(avg_cpu, 2)
+
+        if mem_data['series']:
+            memory_list = [item[1] for item in mem_data['series'][0]['pointlist']]
+            avg_ram = numpy.mean(memory_list)
+            ram = int(avg_ram)
 
         context.update({
             'stats': {
-                'cpu': round(avg_cpu, 2),
-                'ram':  int(avg_ram)
+                'cpu': cpu,
+                'ram': ram
             }
         })
 

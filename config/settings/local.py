@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Local settings
 
 - Run in Debug mode
 - Use console backend for emails
 - Add Django Debug Toolbar
 - Add django-extensions as app
-'''
+"""
+
 import os
 
 from .common import *  # noqa
 
-SECRET_KEY = env('DJANGO_SECRET_KEY', default='cTA6ij=RsO7rE^EWHAaYnVVs~,5Qi1aoQZohm4<U6::C]gI5o.')
+SECRET_KEY = 'cTA6ij=RsO7rE^EWHAaYnVVs~,5Qi1aoQZohm4<U6::C]gI5o.'
 
-
-# TODO: nadpisanie zbedne
 
 # DEBUG
 # ------------------------------------------------------------------------------
@@ -27,12 +26,6 @@ DATABASES = {
         'NAME': project_root('AwesomeGameWebPanel.db'),
     }
 }
-
-# SECRET CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-# Note: This key only used for development and testing.
-SECRET_KEY = env("DJANGO_SECRET_KEY", default='n*#ij6(ux!w1l&#nr*8a)-r^evjyz+*s#4%s)obe)h5e99rm!@')
 
 # Mail settings
 # ------------------------------------------------------------------------------
@@ -48,10 +41,8 @@ CACHES = {
     }
 }
 
-BROKER_URL = env('CLOUDAMQP_URL', default='redis://localhost:6379')
-CELERY_RESULT_BACKEND = env('CLOUDAMQP_URL', default='redis://localhost:6379')
-
-# SALT_PATH = os.path.join(BASE_DIR, '..', 'salt')
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
@@ -70,3 +61,6 @@ DEBUG_TOOLBAR_CONFIG = {
 # TESTING
 # ------------------------------------------------------------------------------
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+DD_API_KEY = "FILL_ME"
+DD_APP_KEY = "FILL_ME"

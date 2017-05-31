@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import environ
-import yaml
 from autoslug.utils import slugify
 from awesome_users.models import GameUser
-from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse_lazy
 from django.utils.encoding import python_2_unicode_compatible
 from rest_framework.authtoken.models import Token
+
 
 @python_2_unicode_compatible
 class GameServerStatus(models.Model):
@@ -27,9 +26,10 @@ class GameServer(models.Model):
     slug = models.SlugField()
 
     url = models.URLField("Adres URL", unique=True)
-    auth_token = models.CharField("Token uwierzytelniający", max_length=256, blank=True)
+    auth_token = models.CharField("Token uwierzytelniający", max_length=256)
+    datadog_hostname = models.CharField("Nazwa hosta w datadog", max_length=256)
 
-    status = models.ForeignKey(GameServerStatus, default=10)
+    status = models.ForeignKey(GameServerStatus, default=1)
 
     panel_user = models.ForeignKey(GameUser, null=True, blank=True)
 
@@ -37,11 +37,13 @@ class GameServer(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-
         if not self.pk:
             self.slug = slugify(self.name)
 
         return super(GameServer, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse_lazy('server:detail', args=[self.pk])
 
 
 @receiver(post_save, sender=GameServer)

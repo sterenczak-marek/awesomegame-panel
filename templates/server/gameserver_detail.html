@@ -8,6 +8,10 @@
         <div class="x_panel tile">
             <div class="x_title">
                 <h2>Dane podstawowe</h2>
+
+                <ul class="nav navbar-right panel_toolbox">
+                    <li style="float: right;"><a href="{% url 'server:edit' object.pk %}"><i class="fa fa-edit"></i></a></li>
+                </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -37,10 +41,23 @@
 
                 <dl class="dl-horizontal">
                     <dt>Procesor:</dt>
-                    <dd>{{ stats.cpu }} %</dd>
+                    <dd>
+                        {% if stats.cpu is not None %}
+                            {{ stats.cpu }} %
+                        {% else %}
+                            <span class="text-muted">Nie udało się pobrać danych</span>
+                        {% endif %}
+                    </dd>
 
                     <dt>Pamięć RAM:</dt>
-                    <dd>{{ stats.ram | filesizeformat }}</dd>
+
+                    <dd>
+                        {% if stats.cpu is not None %}
+                            {{ stats.ram | filesizeformat }}
+                        {% else %}
+                            <span class="text-muted">Nie udało się pobrać danych</span>
+                        {% endif %}
+                    </dd>
                 </dl>
             </div>
         </div>
