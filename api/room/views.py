@@ -21,6 +21,7 @@ from rest_framework.response import Response
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
+from game.models import RoomInProgress
 from server.models import GameServer
 from .serializers import RoomSerializer
 
@@ -86,12 +87,16 @@ class RoomViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['get'])
     def allowed_actions(self, request, **kwargs):
         room = self.get_object()
-        return Response({
-            'join': request.user.room is None and room.users.count() < room.max_players,
-            'leave': request.user.room == room,
-            'ready': request.user.room == room and not request.user.ready_to_play,
-            'unready': request.user.room == room and request.user.ready_to_play,
-        })
+
+        if room.status == 0:
+            return Response({
+                'join': request.user.room is None and room.users.count() < room.max_players,
+                'leave': request.user.room == room,
+                'ready': request.user.room == room and not request.user.ready_to_play,
+                'unready': request.user.room == room and request.user.ready_to_play,
+            })
+        else:
+            return Response({})
 
     @detail_route(methods=['post'])
     def join(self, request, **kwargs):
@@ -194,6 +199,8 @@ class RoomViewSet(viewsets.ModelViewSet):
             })
 
         if response.status_code == 201:
+
+            RoomInProgress.objects.create(room=room, game_server=server)
 
             response_data = response.json()
 

@@ -3,9 +3,10 @@ import time
 import numpy
 from datadog import api, initialize
 from django.conf import settings
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 from .models import GameServer
 
@@ -31,6 +32,11 @@ class ServerCreateView(AdminMixin, CreateView):
 class ServerEditView(AdminMixin, UpdateView):
     model = GameServer
     fields = ['url', 'auth_token', 'datadog_hostname', 'status']
+
+
+class ServerDeleteView(AdminMixin, DeleteView):
+    model = GameServer
+    success_url = reverse_lazy('server:list')
 
 
 class ServerDetailView(AdminMixin, DetailView):

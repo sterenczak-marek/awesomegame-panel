@@ -10,7 +10,10 @@
                 <h2>Dane podstawowe</h2>
 
                 <ul class="nav navbar-right panel_toolbox">
-                    <li style="float: right;"><a href="{% url 'server:edit' object.pk %}"><i class="fa fa-edit"></i></a></li>
+                    <li><a href="{% url 'server:edit' object.pk %}"><i class="fa fa-edit"></i></a></li>
+                    {% if object.can_delete %}
+                        <li><a href="{% url 'server:delete' object.pk %}"><i class="fa fa-trash-o"></i></a></li>
+                    {% endif %}
                 </ul>
                 <div class="clearfix"></div>
             </div>

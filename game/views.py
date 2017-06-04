@@ -12,12 +12,12 @@ from ws4redis.redis_store import RedisMessage
 
 class RoomListView(ListView):
     model = Room
-    template_name = 'game/room-list.html'
+    template_name = 'room/list.html'
 
 
 class RoomDetailView(DetailView):
     model = Room
-    template_name = 'game/room-detail.html'
+    template_name = 'room/detail.html'
 
     def get(self, request, *args, **kwargs):
         response = super(RoomDetailView, self).get(request, *args, **kwargs)
@@ -28,7 +28,7 @@ class RoomDetailView(DetailView):
 class RoomCreateView(CreateView):
     model = Room
     fields = ['name', 'max_players']
-    template_name = 'game/room-create.html'
+    template_name = 'room/create.html'
 
     def get_success_url(self, *args):
         return reverse('room:detail', args=[self.object.slug])

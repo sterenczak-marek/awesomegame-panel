@@ -45,6 +45,10 @@ class GameServer(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('server:detail', args=[self.pk])
 
+    @property
+    def can_delete(self):
+        return self.status.pk in [1, 9]
+
 
 @receiver(post_save, sender=GameServer)
 def after_adding_game_server(sender, instance, created, **kwargs):

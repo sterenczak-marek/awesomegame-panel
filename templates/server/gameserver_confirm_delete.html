@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="x_panel tile">
+            <div class="x_title">
+                <h2>Usuwanie serwera: {{ object }}</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <p>Jesteś pewny?</p>
+
+                    <input type="submit" value="TAK" class="btn btn-danger">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
