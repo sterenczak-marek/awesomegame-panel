@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from awesome_rooms.models import Room
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
+
+from game.models import Room
 
 
 class RoomListView(ListView):

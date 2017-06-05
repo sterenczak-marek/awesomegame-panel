@@ -2,13 +2,14 @@
 from __future__ import unicode_literals
 
 from autoslug.utils import slugify
-from awesome_users.models import GameUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse_lazy
 from django.utils.encoding import python_2_unicode_compatible
 from rest_framework.authtoken.models import Token
+
+from game.models import PanelUser
 
 
 @python_2_unicode_compatible
@@ -31,7 +32,7 @@ class GameServer(models.Model):
 
     status = models.ForeignKey(GameServerStatus, default=1)
 
-    panel_user = models.ForeignKey(GameUser, null=True, blank=True)
+    panel_user = models.ForeignKey(PanelUser, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -53,7 +54,7 @@ class GameServer(models.Model):
 @receiver(post_save, sender=GameServer)
 def after_adding_game_server(sender, instance, created, **kwargs):
     if created:
-        user = GameUser.objects.create(username="system: %s" % instance.name, password="!")
+        user = PanelUser.objects.create(username="system: %s" % instance.name, password="!")
         instance.panel_user = user
         instance.save()
 

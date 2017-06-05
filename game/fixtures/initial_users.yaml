@@ -1,4 +1,4 @@
-- model: awesome_users.gameuser
+- model: game.paneluser
   pk: 1
   fields:
     password: pbkdf2_sha256$30000$wRFGgClK5yq5$5Dh9HX74DqtIyLD522uK7U8mdYG2xvA/r1BxF11SHzE=

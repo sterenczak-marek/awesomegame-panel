@@ -25,7 +25,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -38,8 +37,6 @@ class Migration(migrations.Migration):
                 ('url', models.URLField(unique=True, verbose_name='Adres URL')),
                 ('auth_token', models.CharField(max_length=256, verbose_name='Token uwierzytelniaj\u0105cy')),
                 ('datadog_hostname', models.CharField(max_length=256, verbose_name='Nazwa hosta w datadog')),
-                ('panel_user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
-                                                 to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(

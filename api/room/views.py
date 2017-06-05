@@ -2,18 +2,19 @@
 from __future__ import unicode_literals
 
 import json
-
-import requests
 import time
 
-from datadog import initialize, api
-
-from awesome_rooms.models import Room
-from awesome_users.serializers import UserSerializer
+import requests
+from datadog import api, initialize
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.signals import user_logged_out
+from django.contrib.sites.models import Site
 from django.dispatch import receiver
+from django.urls import reverse
 from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -21,9 +22,12 @@ from rest_framework.response import Response
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
-from game.models import RoomInProgress
+from api.serializers import PanelUserSerializer
+from game.models import Room
 from server.models import GameServer
 from .serializers import RoomSerializer
+
+User = get_user_model()
 
 
 @receiver(user_logged_out)
@@ -74,12 +78,13 @@ class RoomViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
 
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
 
     @detail_route(methods=['get'])
     def users(self, request, **kwargs):
         room = self.get_object()
 
-        serializer = UserSerializer(data=room.users, many=True)
+        serializer = PanelUserSerializer(data=room.users, many=True)
         serializer.is_valid()
 
         return Response(serializer.data)
@@ -177,9 +182,23 @@ class RoomViewSet(viewsets.ModelViewSet):
 
             return response
 
+    @detail_route(methods=['post'])
+    def finished(self, request, **kwargs):
+        room = self.get_object()
+
+        room.status = 0
+        room.save()
+
+        ret_data = {
+            'url_path': reverse('room:detail', args=[room.slug])
+        }
+
+        return Response(status=200, data=json.dumps(ret_data))
+
     def _start_game(self, room):
 
         server = _get_available_server()
+        server_user_token, _ = Token.objects.get_or_create(user=server.panel_user)
 
         if server is None:
             return Response(status=400, data="{'error': 'Brak dostępnego serwera!'}")
@@ -187,6 +206,12 @@ class RoomViewSet(viewsets.ModelViewSet):
         serialized_data = self.get_serializer(instance=room).data
 
         del serialized_data['slug']
+        serialized_data.update({
+            'auth_token': str(server_user_token),
+            'panel_room_id': room.pk,
+            'panel_room_slug': room.slug
+        })
+
         data = json.dumps(serialized_data)
         server_without_leading_slash = server.url.rstrip('/')
 
@@ -200,7 +225,8 @@ class RoomViewSet(viewsets.ModelViewSet):
 
         if response.status_code == 201:
 
-            RoomInProgress.objects.create(room=room, game_server=server)
+            room.server = server
+            room.save()
 
             response_data = response.json()
 

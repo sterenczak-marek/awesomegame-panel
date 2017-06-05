@@ -251,7 +251,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 # Custom user app defaults
 # Select the correct user model
-AUTH_USER_MODEL = 'awesome_users.GameUser'
+AUTH_USER_MODEL = 'game.PanelUser'
+
 # LOGIN_REDIRECT_URL = 'users:redirect'
 # LOGIN_URL = 'account_login'
 

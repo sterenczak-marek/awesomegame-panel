@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from awesome_rooms.models import Room
-from awesome_users.models import GameUser
-from awesome_users.serializers import UserSerializer
 from django.core.urlresolvers import reverse
 from rest_framework import serializers
 
+from api.serializers import PanelUserSerializer
+from awesome_users.models import GameUser
+from game.models import Room
+
 
 class RoomSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True, read_only=True)
+    users = PanelUserSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField()
 
     class Meta:
