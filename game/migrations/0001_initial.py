@@ -38,6 +38,8 @@ class Migration(migrations.Migration):
                 ('is_admin', models.BooleanField(default=False)),
                 ('ready_to_play', models.BooleanField(default=False)),
                 ('login_token', models.CharField(blank=True, max_length=256)),
+                ('wins', models.PositiveIntegerField(default=0)),
+                ('total_games', models.PositiveIntegerField(default=0)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
             ],
             options={

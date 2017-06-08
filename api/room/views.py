@@ -186,8 +186,19 @@ class RoomViewSet(viewsets.ModelViewSet):
     def finished(self, request, **kwargs):
         room = self.get_object()
 
+        received_data = request.data
+
+        winner = User.objects.get(id=received_data['winner']['panel_user_id'])
+
+        winner.wins += 1
+        winner.save()
+
         room.status = 0
         room.save()
+
+        for user in room.users.all():
+            user.ready_to_play = False
+            user.save()
 
         ret_data = {
             'url_path': reverse('room:detail', args=[room.slug])
@@ -205,7 +216,6 @@ class RoomViewSet(viewsets.ModelViewSet):
 
         serialized_data = self.get_serializer(instance=room).data
 
-        del serialized_data['slug']
         serialized_data.update({
             'auth_token': str(server_user_token),
             'panel_room_id': room.pk,
@@ -228,6 +238,10 @@ class RoomViewSet(viewsets.ModelViewSet):
             room.server = server
             room.save()
 
+            for user in room.users.all():
+                user.total_games += 1
+                user.save()
+
             response_data = response.json()
 
             for user in response_data.get('users'):
@@ -244,4 +258,4 @@ class RoomViewSet(viewsets.ModelViewSet):
             return Response(status=302, data=response)
 
         else:
-            return Response(status=400, data=response.json())
+            return Response(status=400, data=response.data)

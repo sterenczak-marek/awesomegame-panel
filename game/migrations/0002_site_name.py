@@ -17,8 +17,6 @@ def initial_data(apps, schema_editor):
         }
     )
 
-    call_command('loaddata', 'initial_users')
-
 
 def do_nothing(apps, schema_editor):
     pass
@@ -27,6 +25,7 @@ def do_nothing(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ('game', '0001_initial'),
+        ('sites', '0002_alter_domain_unique'),
     ]
 
     operations = [

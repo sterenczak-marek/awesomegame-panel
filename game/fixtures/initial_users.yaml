@@ -1,8 +1,0 @@
-- model: game.paneluser
-  pk: 1
-  fields:
-    password: pbkdf2_sha256$30000$wRFGgClK5yq5$5Dh9HX74DqtIyLD522uK7U8mdYG2xvA/r1BxF11SHzE=
-    username: admin
-    email: ms42091@st.amu.edu.pl
-    is_superuser: True
-    is_staff: True

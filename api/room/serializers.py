@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from rest_framework import serializers
 
 from api.serializers import PanelUserSerializer
@@ -15,7 +15,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = '__all__'
+        fields = ['users', 'name', 'url']
 
     def get_url(self, obj):
         return reverse("room:detail", args=[obj.slug])
@@ -36,7 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['password2']:
-            raise serializers.ValidationError(_("The two password fields didn't match."))
+            raise serializers.ValidationError("The two password fields didn't match.")
         return data
 
     def create(self, validated_data):

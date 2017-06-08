@@ -24,5 +24,7 @@ class Room(AbstractRoom):
 
 
 class PanelUser(GameUser):
+    room = models.ForeignKey(Room, null=True, on_delete=models.SET_NULL, related_name='users')
 
-    room = models.ForeignKey(Room, null=True, on_delete = models.SET_NULL, related_name = 'users')
+    total_games = models.PositiveIntegerField(default=0)
+    wins = models.PositiveIntegerField(default=0)
