@@ -2,15 +2,9 @@
 from __future__ import unicode_literals
 
 import json
-import time
 
 import requests
-from datadog import api, initialize
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.signals import user_logged_out
-from django.contrib.sites.models import Site
-from django.dispatch import receiver
 from django.urls import reverse
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
@@ -30,46 +24,13 @@ from .serializers import RoomSerializer
 User = get_user_model()
 
 
-@receiver(user_logged_out)
-def remove_guest(sender, user, request, **kwargs):
-    if user.is_guest:
-        user.delete()
-
-
-#
-# class GuestRestView(GenericAPIView):
-#     serializer_class = LoginGuestSerializer
-#     permission_classes = (AllowAny,)
-#
-#     def post(self, request, *args, **kwargs):
-#         user = GameUser.create_guest()
-#         user.backend = 'django.contrib.auth.backends.ModelBackend'
-#         login(self.request, user)
-#
-#         return Response("OK", status=status.HTTP_200_OK)
-
-
 def _get_available_server():
-    options = {
-        'api_key': settings.DD_API_KEY,
-        'app_key': settings.DD_APP_KEY,
-    }
+    game_server_stats = {}
 
-    initialize(**options)
+    for game_server in GameServer.objects.exclude(status=9):
+        game_server_stats[game_server] = game_server.stats['ram']
 
-    now = int(time.time())
-    query = 'system.cpu.user{server:game}by{host}'
-
-    data = api.Metric.query(start=now - 60, end=now, query=query)
-
-    # TODO: dorobić analize i wybor serwera
-
-    server = GameServer.objects.filter(status_id=1).first()
-
-    if server.auth_token is None:
-        return None
-
-    return server
+    return min(game_server_stats, key=game_server_stats.get)
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -111,6 +72,7 @@ class RoomViewSet(viewsets.ModelViewSet):
             raise ValidationError('User jest już adminem')
 
         request.user.room = room
+        request.user.ready_to_play = False
         request.user.save()
 
         response = self.users(request, **kwargs)
@@ -244,18 +206,19 @@ class RoomViewSet(viewsets.ModelViewSet):
 
             response_data = response.json()
 
-            for user in response_data.get('users'):
+            for user_data in response_data.get('users'):
                 response = {
                     'type': "PLAY",
-                    'url': server_without_leading_slash + "/%s/" % user.get('token'),
+                    'url': server_without_leading_slash + "/%s/" % user_data.get('token'),
                 }
                 msg = RedisMessage(json.dumps(response))
-                RedisPublisher(facility='room_detail', users=[user.get('username')]).publish_message(msg)
+                user = User.objects.get(id=user_data['panel_user_id'])
+                RedisPublisher(facility='room_detail', users=[user.username]).publish_message(msg)
 
             room.status = 1
             room.save()
 
-            return Response(status=302, data=response)
+            return Response(status=200, data=response)
 
         else:
-            return Response(status=400, data=response.data)
+            return Response(status=400, data=response.content)

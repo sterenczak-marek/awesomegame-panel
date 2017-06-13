@@ -18,7 +18,8 @@
                     <tr>
                         <th>Nazwa serwera</th>
                         <th>Adres URL</th>
-                        <th>Status</th>
+                        <th>Zużycie procesora</th>
+                        <th>Zużycie pamięci RAM</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -26,7 +27,8 @@
                         <tr>
                             <td><a href="{% url 'server:detail' server.pk %}">{{ server.name }}</a></td>
                             <td>{{ server.url }}</td>
-                            <td>{{ server.status }}</td>
+                            <td>{{ server.stats.cpu }} %</td>
+                            <td>{{ server.stats.ram }} % </td>
                         </tr>
                     {% endfor %}
                     </tbody>

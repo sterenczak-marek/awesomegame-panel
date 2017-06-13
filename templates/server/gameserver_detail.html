@@ -45,20 +45,20 @@
                 <dl class="dl-horizontal">
                     <dt>Procesor:</dt>
                     <dd>
-                        {% if stats.cpu is not None %}
-                            {{ stats.cpu }} %
+                        {% if object.stats.cpu is not None %}
+                            {{ object.stats.cpu }} %
                         {% else %}
-                            <span class="text-muted">Nie udało się pobrać danych</span>
+                            <span class="text-muted">Brak aktualnych danych</span>
                         {% endif %}
                     </dd>
 
                     <dt>Pamięć RAM:</dt>
 
                     <dd>
-                        {% if stats.cpu is not None %}
-                            {{ stats.ram | filesizeformat }}
+                        {% if object.stats.cpu is not None %}
+                            {{ object.stats.ram }} %
                         {% else %}
-                            <span class="text-muted">Nie udało się pobrać danych</span>
+                            <span class="text-muted">Brak aktualnych danych</span>
                         {% endif %}
                     </dd>
                 </dl>

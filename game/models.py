@@ -28,3 +28,7 @@ class PanelUser(GameUser):
 
     total_games = models.PositiveIntegerField(default=0)
     wins = models.PositiveIntegerField(default=0)
+
+    @property
+    def looses(self):
+        return self.total_games - self.wins

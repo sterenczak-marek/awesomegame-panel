@@ -39,6 +39,7 @@ class RoomCreateView(CreateView):
 
         self.request.user.room = self.object
         self.request.user.is_admin = True
+        self.request.user.ready_to_play = False
         self.request.user.save()
 
         msg = RedisMessage('Room %s created' % self.object)

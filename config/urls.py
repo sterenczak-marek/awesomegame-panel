@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
     url(r'^room/', include('game.urls', namespace="room")),
+    url(r'^stats/', include('stats.urls', namespace="stats")),
     url(r'^server/', include('server.urls', namespace="server")),
 
     url(settings.ADMIN_URL, include(admin.site.urls)),

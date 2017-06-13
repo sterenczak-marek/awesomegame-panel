@@ -7,11 +7,12 @@
             {% if request.user.is_authenticated %}
                 <li><a href="{% url 'room:list' %}"><i class="fa fa-edit"></i>Pokoje</a></li>
 
-
                 {% if request.user.is_superuser %}
 
                     <li><a href="{% url 'server:list' %}"><i class="fa fa-desktop"></i> Serwery gry</a></li>
                 {% endif %}
+
+                <li><a href="{% url 'stats:index' %}"><i class="fa fa-pie-chart"></i>Statystyki</a></li>
 
             {% else %}
                 <li><a href="{% url 'account_login' %}">Zaloguj</a></li>

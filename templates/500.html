@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Server Error{% endblock %}
+{% block title %}Bład serwera{% endblock %}
 
 {% block content %}
-<h1>Ooops!!! 500</h1>
 
-<h3>Looks like something went wrong!</h3>
+    <div class="col-middle">
+        <div class="text-center text-center">
+            <h1 class="error-number">500</h1>
+            <h2>Wystąpił błąd serwera</h2>
+        </div>
+    </div>
 
-<p>We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing.</p>
 {% endblock content %}
 
 

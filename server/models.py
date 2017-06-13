@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import time
+
+import numpy
 from autoslug.utils import slugify
+from datadog import initialize, api
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -49,6 +54,44 @@ class GameServer(models.Model):
     @property
     def can_delete(self):
         return self.status.pk in [1, 9]
+
+    @property
+    def stats(self):
+        options = {
+            'api_key': settings.DD_API_KEY,
+            'app_key': settings.DD_APP_KEY,
+        }
+
+        initialize(**options)
+
+        now = int(time.time())
+        query = 'system.cpu.user{host:%s}' % self.datadog_hostname
+        cpu_data = api.Metric.query(start=now - 3600, end=now, query=query)
+
+        query = 'system.mem.used{host:%s}' % self.datadog_hostname
+        memory_used = api.Metric.query(start=now - 3600, end=now, query=query)
+
+        query = 'system.mem.total{host:%s}' % self.datadog_hostname
+        memory_total = api.Metric.query(start=now - 3600, end=now, query=query)
+
+        cpu, ram = None, None
+
+        if cpu_data['series']:
+            cpu_list = [item[1] for item in cpu_data['series'][0]['pointlist']]
+            avg_cpu = numpy.mean(cpu_list)
+            cpu = round(avg_cpu, 2)
+
+        if memory_used['series']:
+            memory_used_list = [item[1] for item in memory_used['series'][0]['pointlist']]
+            memory_total_list = [item[1] for item in memory_total['series'][0]['pointlist']]
+            avg_ram = numpy.mean(memory_used_list)
+            avg_total_ram = numpy.mean(memory_total_list)
+            ram = (avg_ram / avg_total_ram) * 100
+
+        return {
+            'cpu': cpu,
+            'ram': round(ram, 2)
+        }
 
 
 @receiver(post_save, sender=GameServer)

@@ -60,6 +60,7 @@ LOCAL_APPS = (
     'api',
     'game',
     'server',
+    'stats',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

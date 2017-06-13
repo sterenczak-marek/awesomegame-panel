@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block page_title %}
+    Statystyki gracza: <strong>{{ user.username }}</strong>
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Rozegrane gry</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <canvas id="wins_chart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_script %}
+    <script src="{% static 'gentelella/vendors/Chart.js/dist/Chart.bundle.min.js' %}"></script>
+    <script>
+        var ctx = document.getElementById('wins_chart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["Wygrane", "Przegrane"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [{{ user.wins }}, {{ user.looses }}],
+                    backgroundColor: [
+                        'rgba(65, 244, 83, 0.7)',
+                        'rgba(244, 66, 66, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+{% endblock %}
